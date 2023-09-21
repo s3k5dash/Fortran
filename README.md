@@ -1,4 +1,4 @@
 # Fortran
 First Git Repository.
 <br>
-Author - Suman kumar Dash
+Author - Suman Dash (fortran)
