@@ -6,5 +6,4 @@ set ylabel "Radius [m]"
 set zlabel "Radius [m]"
 set title "My first plot with gnuplot"
 
-
-plot sin(x)/x
+splot sin(x)
