@@ -69,7 +69,7 @@ program newton
     
 
 
-    open(unit=1, file='data.csv', status='replace')
+    open(unit=1, file='data.dat', status='replace')
 
     do k = 1, num_elements
         write(1,*) alpha_m(k),0
@@ -85,15 +85,25 @@ subroutine ntrap(x, alpha, iteration)
 
     implicit none
 
-    real :: x, fx, fx_prime, error, alpha
+    real :: x, fx, fx_prime, error, alpha, bit, bib, length
+    real :: bitmulbib
+    real :: bitsumbib
     real :: tol = 0.00001
     integer :: iteration
 
     iteration = 0
+    
+    bit = 10.0
+    bib = 1.0
+    length = 1.0
+    bitmulbib = bib * bit
+    bitsumbib = bib + bit
 
-    10  fx = (11 * x) / (x**2 - 11) - 1 * tan(x)
-        fx_prime = (((11) * (x**2 - (10)) - (11) * (2 * x**2)) / ((x**2 - (10))**2)) - 1 / cos(x)**2
-        
+    10  fx = ((x * (bib + bit) )/ (x**2 - (bib * bit))) - (length * tan(x))
+        ! fx_prime =  ((bib + bit) * (x**2 - (bib * bit)) - (bib + bit) * (2 * x**2)) / ((x**2 - (bib * bit))**2) - ( length/cos(x)**2)
+        fx_prime = ((bitsumbib * (x**2 - bitmulbib)) - (bitsumbib * (2.0 * x**2))) / ((x**2 - bitmulbib)**2) - length/cos(x)**2
+
+
         error=fx/fx_prime
         x=x-error
         iteration=iteration+1
