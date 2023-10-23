@@ -6,7 +6,12 @@ program newton
     real :: alpha_m(50)
     integer :: iteration,i
 
-    x = -2
+
+    integer :: k
+    integer :: num_elements = 50
+
+
+    x = 0
     dx = 1
 
     do i = 1, 50, 1
@@ -58,6 +63,19 @@ program newton
     ! end do
     
     print*, "end"
+
+
+
+    
+
+
+    open(unit=1, file='data.csv', status='replace')
+
+    do k = 1, num_elements
+        write(1,*) alpha_m(k),0
+    end do
+
+    close(unit=1)
 
 
 end
