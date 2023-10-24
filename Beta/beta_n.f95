@@ -2,8 +2,8 @@ program betaFinder
 
     implicit none
 
-    real :: x, beta, dx
-    real :: beta_n(50)
+    real(8) :: x, beta, dx
+    real(8) :: beta_n(50)
     integer :: iteration, i
 
 
@@ -11,7 +11,7 @@ program betaFinder
     integer :: num_elements = 50
 
 
-    x = 0
+    x = 1
 
     do i = 1, 50, 1
 
@@ -90,8 +90,8 @@ subroutine newtonRaphson(x, beta, iteration)
 
     implicit none
 
-    real :: x, fx, fx_prime, error, beta, biT
-    real :: tol = 0.00001
+    real(8) :: x, fx, fx_prime, error, beta, biT
+    real(8) :: tol = 0.00001
     integer :: iteration
 
     iteration = 0

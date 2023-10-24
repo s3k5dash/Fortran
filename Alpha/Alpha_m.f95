@@ -2,8 +2,8 @@ program alphaFinder
 
     implicit none
 
-    real :: x, alpha, dx
-    real :: alpha_m(50)
+    real(8) :: x, alpha, dx
+    real(8) :: alpha_m(50)
     integer :: iteration,i
 
 
@@ -11,7 +11,7 @@ program alphaFinder
     integer :: num_elements = 50
 
 
-    x = 0
+    x = 1
 
     do i = 1, 50, 1
 
@@ -64,7 +64,8 @@ program alphaFinder
 ! -------------------------------------------------------------------------------------
     !! 'data.dat' file Output operations
 
-    open(unit=1, file='alpha_m.dat', status='replace')
+    open(unit=1, file='alpha_m.dat', status='old', action='write', position='append')
+    ! open(unit=1, file='alpha_m.dat', status='replace')
 
     do k = 1, num_elements
         write(1,*) alpha_m(k), 0
@@ -89,8 +90,8 @@ subroutine newtonRaphson(x, alpha, iteration)
 
     implicit none
 
-    real :: x, fx, fx_prime, error, alpha, bit, bib, length
-    real :: tol = 0.00001
+    real(8) :: x, fx, fx_prime, error, alpha, bit, bib, length
+    real(8) :: tol = 0.00001
     integer :: iteration
 
     iteration = 0
@@ -101,7 +102,9 @@ subroutine newtonRaphson(x, alpha, iteration)
     length = 1.0
 
     10  fx = ((x * (bib + bit) )/ (x**2 - (bib*bit))) - (length * tan(x))
-        fx_prime = (((bib + bit) * (x**2 - (bib*bit))) - ((bib + bit) * (2.0 * x**2))) / ((x**2 - (bib*bit))**2) - length/cos(x)**2
+    
+        fx_prime = (((bib + bit) * (x**2 - (bib*bit))) - ((bib + bit) * (2.0 * x**2))) &
+                    / ((x**2 - (bib*bit))**2) - length/cos(x)**2
 
 
         error=fx/fx_prime
