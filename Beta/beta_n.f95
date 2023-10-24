@@ -15,7 +15,7 @@ program betaFinder
 
     do i = 1, 50, 1
 
-    dx = 0.5
+    dx = 1
 
         11  x = x + dx
 
@@ -90,7 +90,7 @@ subroutine newtonRaphson(x, beta, iteration)
     iteration = 0
     
     ! Value of BiT
-    biT = 10.0
+    biT = 1.0
     
 
     10  fx = x * tan(x) - BiT

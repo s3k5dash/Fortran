@@ -2,7 +2,7 @@ set xlabel "x-axis"
 set ylabel "y-axis"
 set title "Newton Raphson"
 
-BiT = 10
+BiT = 1
 
 f(x) = x * tan(x) - BiT
 df(x) = tan(x) + x * (1 / cos(x)**2)

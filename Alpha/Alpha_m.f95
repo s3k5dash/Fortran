@@ -15,7 +15,7 @@ program alphaFinder
 
     do i = 1, 50, 1
 
-    dx = 0.5
+    dx = 1
 
         11  x = x + dx
 
