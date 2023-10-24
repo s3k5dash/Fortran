@@ -75,6 +75,12 @@ program alphaFinder
     print*, "end"
 
 ! -------------------------------------------------------------------------------------
+    !! gnuplot -> plot from file 
+    ! ( Remember to change the Value of { Bit, Bib and L } in "plot_alpha_m.gnu" file )
+
+    ! call execute_command_line("gnuplot plot_alpha_m.gnu")
+
+! -------------------------------------------------------------------------------------
 
 end program alphaFinder
 

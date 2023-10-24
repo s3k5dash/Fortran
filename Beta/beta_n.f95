@@ -75,6 +75,13 @@ program betaFinder
     print*, "end"
 
 ! -------------------------------------------------------------------------------------
+    !! gnuplot -> plot from file 
+    ! ( Remember to change the Value of { BiT } in "plot_beta_n.gnu" file )
+
+
+    ! call execute_command_line("gnuplot plot_beta_n.gnu")
+
+! -------------------------------------------------------------------------------------
 
 end program betaFinder
 
