@@ -1,32 +1,64 @@
-program GnuplotWithFortran
-  implicit none
-  integer :: i
-  real(8) :: x
-  real(8), dimension(100) :: y
-  character(100) :: cmd
+program ReplaceSpecificLines
+    implicit none
 
-  ! Generate data (sine wave)
-  do i = 1, 100
-    x = 0.1 * i
-    y(i) = sin(x)
-  end do
+    character(20) :: filename
+    integer :: status
+    character(100) :: line
+    character(100), dimension(100) :: newContent
+    integer :: i
 
-  ! Create a data file
-  open(unit=10, file='data.txt', status='replace')
-  do i = 1, 100
-    write(10, *) x, y(i)
-  end do
-  close(10)
+    ! Specify the filename
+    filename = 'data.txt'
 
-  ! Create a Gnuplot script file
-  open(unit=20, file='gnuplot_script.plt', status='replace')
-  write(20, *) "set terminal pngcairo"
-  write(20, *) "set output 'plot.png'"
-  write(20, *) "plot 'data.txt' using 1:2 with lines"
-  close(20)
+    ! Open the existing file for reading
+    open(unit=10, file=filename, status='old', action='read', iostat=status)
+    
+    ! Check for errors when opening the file
+    if (status /= 0) then
+        write(*, *) 'Error opening the file'
+        stop
+    end if
 
-  ! Execute Gnuplot to create the plot
-  cmd = "gnuplot gnuplot_script.plt"
-  call execute_command_line(cmd)
+    ! Read the lines from the existing file
+    i = 1
+    do
+        read(10, '(A)', iostat=status) line
+        if (status /= 0) exit
+        newContent(i) = line
 
-end program GnuplotWithFortran
+        ! Check which lines to replace (2 and 4)
+        if (i == 2 .or. i == 4) then
+            ! Replace the lines with new content
+            select case(i)
+                case(2)
+                    newContent(i) = 'Line 2: This is the new second line.'
+                case(4)
+                    newContent(i) = 'Line 4: This is the new fourth line.'
+            end select
+        end if
+
+        i = i + 1
+    end do
+
+    ! Close the existing file
+    close(10)
+
+    ! Open the file for writing (which replaces the existing file)
+    open(unit=20, file=filename, status='replace', action='write', iostat=status)
+    
+    ! Check for errors when opening the file
+    if (status /= 0) then
+        write(*, *) 'Error opening the file for writing'
+        stop
+    end if
+
+    ! Write the modified content back to the file
+    do i = 1, i - 1
+        write(20, *) newContent(i)
+    end do
+
+    ! Close the file
+    close(20)
+
+    write(*, *) 'Specific lines replaced in "', filename, '"'
+end program ReplaceSpecificLines
