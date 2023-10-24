@@ -1,4 +1,4 @@
-program GnuplotDemo
+program GnuplotWithFortran
   implicit none
   integer :: i
   real(8) :: x
@@ -29,4 +29,4 @@ program GnuplotDemo
   cmd = "gnuplot gnuplot_script.plt"
   call execute_command_line(cmd)
 
-end program GnuplotDemo
+end program GnuplotWithFortran
