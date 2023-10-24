@@ -1,10 +1,10 @@
-program alphaFinder
+program betaFinder
 
     implicit none
 
-    real(8) :: x, alpha, dx
-    real(8) :: alpha_m(50)
-    integer :: iteration,i
+    real(8) :: x, beta, dx
+    real(8) :: beta_n(50)
+    integer :: iteration, i
 
 
     integer :: k
@@ -19,30 +19,30 @@ program alphaFinder
 
         11  x = x + dx
 
-            call newtonRaphson(x, alpha, iteration)
+            call newtonRaphson(x, beta, iteration)
 
             if ( i .eq. 1 ) then 
 
-                alpha_m(i) =  alpha
+                beta_n(i) =  beta
                 cycle
 
             endif
             
-            if (  alpha_m(i-1) .eq. alpha ) then
+            if (  beta_n(i-1) .eq. beta ) then
 
                 dx = dx + 1
                 goto 11
 
             endif
 
-        alpha_m(i) = alpha 
+        beta_n(i) = beta 
 
         !! Debugging print statements 
-        ! print*,"The root of the equation is", alpha
+        ! print*,"The root of the equation is", beta
         ! print*, "the value of x is", x
         ! Print*,"Iteration is",iteration
         
-        x = alpha
+        x = beta
 
     end do
 
@@ -54,7 +54,7 @@ program alphaFinder
     !     print*,"Please insert the initial guess of the root of equation."
     !     read*,x
     
-    !     call newtonRaphson(x, alpha, iteration)
+    !     call newtonRaphson(x, beta, iteration)
 
     !     print*,"The root of the equation is",x
     !     Print*,"Iteration is",iteration
@@ -64,10 +64,10 @@ program alphaFinder
 ! -------------------------------------------------------------------------------------
     !! 'data.dat' file Output operations
 
-    open(unit=1, file='alpha_m.dat', status='replace')
+    open(unit=1, file='beta_n.dat', status='replace')
 
     do k = 1, num_elements
-        write(1,*) alpha_m(k), 0
+        write(1,*) beta_n(k), 0
     end do
 
     close(unit=1)
@@ -76,35 +76,32 @@ program alphaFinder
 
 ! -------------------------------------------------------------------------------------
     !! gnuplot -> plot from file 
-    ! ( Remember to change the Value of { Bit, Bib and L } in "plot_alpha_m.gnu" file )
+    ! ( Remember to change the Value of { BiT } in "plot_beta_n.gnu" file )
 
-    ! call execute_command_line("gnuplot plot_alpha_m.gnu")
+
+    ! call execute_command_line("gnuplot plot_beta_n.gnu")
 
 ! -------------------------------------------------------------------------------------
 
-end program alphaFinder
+end program betaFinder
 
 
-subroutine newtonRaphson(x, alpha, iteration)
+subroutine newtonRaphson(x, beta, iteration)
 
     implicit none
 
-    real(8) :: x, fx, fx_prime, error, alpha, bit, bib, length
+    real(8) :: x, fx, fx_prime, error, beta, biT
     real(8) :: tol = 0.00001
     integer :: iteration
 
     iteration = 0
     
-    ! Value of Bit Bib and L
-    bit = 10.0
-    bib = 1.0 
-    length = 1.0
-
-    10  fx = ((x * (bib + bit) )/ (x**2 - (bib*bit))) - (1 * tan(x*length))
+    ! Value of BiT
+    biT = 1.0
     
-        fx_prime = (((bib + bit) * (x**2 - (bib*bit))) - ((bib + bit) * (2.0 * x**2))) &
-                    / ((x**2 - (bib*bit))**2) - 1/cos(x*length)**2
 
+    10  fx = x * tan(x) - BiT
+        fx_prime = tan(x) + x * (1 / cos(x)**2)
 
         error=fx/fx_prime
         x=x-error
@@ -121,7 +118,7 @@ subroutine newtonRaphson(x, alpha, iteration)
 
     endif
 
-    alpha = x
+    beta = x
     
     
     ! print*,"Tolerance is",tol
