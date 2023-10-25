@@ -1,1 +1,0 @@
-'data.dat' file Output operations

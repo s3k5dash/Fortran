@@ -1,4 +1,4 @@
 # Fortran
-First Git Repository.
+Git Repository of Transient Analysis of Two-Dimensional Rectangular Fin
 <br>
-Author - Suman Dash (fortran)
+Author - Suman kumar Dash (fortran)
