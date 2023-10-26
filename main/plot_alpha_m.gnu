@@ -2,12 +2,12 @@ set xlabel "x-axis"
 set ylabel "y-axis"
 set title "Newton Raphson"
 
-Bit = 10
-Bib = 1
-L = 1
+bit = 10
+bib = 1
+length = 1
 
-f(x) = ((x * (Bib + Bit) )/ (x**2 - (Bib * Bit))) - (L * tan(x))
-df(x) = ((((Bib + Bit) * (x**2 - (Bib * Bit))) - ((Bib + Bit) * (2.0 * x**2))) / ((x**2 - (Bib * Bit))**2)) -( L/cos(x)**2)
+f(x) = ((x * (bib + bit) )/ (x**2 - (bib * bit))) - (length * tan(x))
+df(x) = ((((bib + bit) * (x**2 - (bib * bit))) - ((bib + bit) * (2.0 * x**2))) / ((x**2 - (bib * bit))**2)) -( length/cos(x)**2)
 fdf(x)= f(x)/df(x)
 
 set terminal wxt size 1066,600

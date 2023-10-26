@@ -15,11 +15,9 @@ program FunctionEvaluation
     bi_t = 10.0       ! Replace with desired value
     bib = 1.0         ! Replace with desired value
     biT = 1.0         ! Replace with desired value
-    x = 1.0           ! Replace with desired value
-    y = 0.5           ! Replace with desired value
-    t = 2.0           ! Replace with desired value
-
-    ! Manually change the value of "length, bi_t, bib, biT" in 'plot_alpha_m.gnu' & 'plot_beta_n.gnu'
+    x = 0.5           ! Replace with desired value
+    y = 1           ! Replace with desired value
+    t = 1.0           ! Replace with desired value
 
 ! -------------------------------------------------------------------------------------------
     !! Assign values of the constants to the 'constants.dat' file
@@ -43,25 +41,25 @@ program FunctionEvaluation
     ! call execute_command_line("gnuplot plot_beta_n.gnu")
 
 ! -------------------------------------------------------------------------------------------
-    !! U Finder
+!     !! U Finder
 
-    i = 1
-    x = 0
+!     i = 1
+!     x = 0
 
-    13  if ( x .gt. 1) then
-            goto 14
-        end if
+!     13  if ( x .gt. 1) then
+!             goto 14
+!         end if
         
-        call fu_xyt(length, bi_t, bib, biT, x, y, t, u)
+!         call fu_xyt(length, bi_t, bib, biT, x, y, t, u)
 
-        u_x(i) = u
-        x_i(i) = x
+!         u_x(i) = u
+!         x_i(i) = x
 
-        x = x + 0.1
-        i = i + 1  
+!         x = x + 0.1
+!         i = i + 1  
 
-        goto 13
-    14  ux_length = i-1
+!         goto 13
+!     14  ux_length = i-1
     
 ! ----------------------------------------------
     !! Debugging print statements 
@@ -71,20 +69,64 @@ program FunctionEvaluation
     ! do i = 1, ux_length
     !     print*, "u_x(", i, ") = ", u_x(i)
     ! end do
-    ! do i = 1, ux_length
-    !     print*, "x_i(", i, ") = ", x_i(i)
-    ! end do
 
 ! -------------------------------------------------------------------------------------------
     !! 'fU_x.dat' file Output operations
 
-    open(unit=1, file='fU_x.dat', status='replace')
+!     open(unit=1, file='fU_x.dat', status='replace')
 
-    do k = 1, ux_length
-        write(1,*) x_i(k),u_x(k)
+!     do k = 1, ux_length
+!         write(1,*) u_x(k), x_i(k)
+!     end do
+
+!     close(unit=1)
+
+!     print*, "U Finder executed successfully"
+
+! -------------------------------------------------------------------------------------------
+
+    !! Q Finder
+
+    i = 1
+    t = 0
+
+    15  if ( t .gt. 2) then
+            goto 16
+        end if
+        
+        call Q_2D_t(length, bi_t, bib, biT, x, y, t, q)
+
+        q_t(i) = q
+        t_i(i) = t
+
+        t = t + 0.01
+        i = i + 1  
+
+        goto 15
+    16  qt_length = i-1
+    
+! ----------------------------------------------
+    !! Debugging print statements 
+
+    print*, qt_length
+
+    do i = 1, qt_length
+        print*, "q_t(", i, ") = ", q_t(i)
+    end do
+    do i = 1, qt_length
+        print*, "t_i(", i, ") = ", t_i(i)
     end do
 
-    close(unit=1)
+! -------------------------------------------------------------------------------------------
+    !! 'fQ_t.dat' file Output operations
+
+    open(unit=2, file='fQ_t.dat', status='replace')
+
+    do k = 1, qt_length
+        write(2,*) t_i(k), q_t(k)
+    end do
+
+    close(unit=2)
 
     print*, "U Finder executed successfully"
 
@@ -94,17 +136,17 @@ end program FunctionEvaluation
 
 ! =========================================================================================================
 
-subroutine fu_xyt(length, bi_t, bib, biT, x, y, t, u)
+subroutine Q_2D_t(length, bi_t, bib, biT, x, y, t, q)
 
     implicit none
     
     integer, parameter :: max = 50
     integer :: i, w, m, n 
-    real(8) :: alpha(max), beta(max), cm(max), bm(max), am(max), B_m(max)
-    real(8) :: bmn, u, temp_v, length, bi_t, bib, biT, x, y, t
+    real(8) :: alpha(max), beta(max), cm(max), bm(max)
+    real(8) :: bmn, q, temp_q, length, bi_t, bib, biT, x, y, t
 
 ! -------------------------------------------------------------------------------------------
-    !! 'alpha_m.dat' file read operations
+    !! 'alpha_m.(m).dat' file read operations
 
     open(unit=10, file="alpha_m.dat", status='old', action='read')
     i = 0
@@ -142,7 +184,7 @@ subroutine fu_xyt(length, bi_t, bib, biT, x, y, t, u)
     ! end do
    
 ! -------------------------------------------------------------------------------------------
-    !! Calculation of cm(m), bm(m), am(m), B_m(m), bmn, u
+    !! Calculation of cm(m), bm(m), am(m), bm(m)(m), bmn, q
 
     do m = 1, max 
 
@@ -153,42 +195,24 @@ subroutine fu_xyt(length, bi_t, bib, biT, x, y, t, u)
         bm(m) = (2.0 * (((alpha(m)**2)*(sin(alpha(m)*length))) - &
             ((bib*alpha(m))*(cos(alpha(m)*length) - 1.0)))/ cm(m))
 
-        am(m) = bm(m) + (bm(m) / biT)
-
-        B_m(m) = bm(m) / biT
-
         do n = 1, max
 
             bmn = ((-2*(bm(m))*(((beta(n))*(sin(beta(n))))-(biT*(cos(beta(n))))+biT)) / (((beta(n))*biT)* &
                 (((cos(beta(n)))*(sin(beta(n))))+(beta(n)))))
 
-            temp_v = temp_v + (((((beta(n)**2)*exp(-1*((beta(n)**2)+(alpha(m)**2))*t))+(alpha(m)**2))/ &
-                ((beta(n)**2)+(alpha(m)**2))) * (cos(beta(n)*x)*bmn))
+            temp_q = temp_q + (((((beta(n)**2)*exp(-1*((beta(n)**2)+(alpha(m)**2))*t))+(alpha(m)**2))/ &
+                ((beta(n)**2)+(alpha(m)**2))) * (beta(n)*cos(beta(n))*bmn))
                 
             
         end do
 
-        u = u + ((((1 - x)*am(m)) + (x*B_m(m)) + (temp_v))* &
-                ((cos(alpha(m)*y))+((bib/(alpha(m)))*(sin(alpha(m)*y)))))
+        q = q + (((bm(m))+(temp_q)) * &
+                (((-alpha(m)*sin(alpha(m)*length))+((Bib)*cos(alpha(m)*length))-(Bib)) / (alpha(m)**2)))
 
-
-        temp_v = 0
+        temp_q = 0
 
     end do
-
-! ----------------------------------------------------------
-    !! Debugging print statements 
     
-    ! do i = 1, max
-    !     write(*,*) "cm(", i, ") = ", cm(i)
-    !     write(*,*) "bm(", i, ") = ", bm(i)
-    !     write(*,*) "am(", i, ") = ", am(i)
-    !     write(*,*) "B_m(", i, ") = ", B_m(i)
+    q = -1 * q
 
-    ! end do
-    
-    ! write(*,*) "u = ", u
-
- ! -------------------------------------------------------------------------------------------
-
-end subroutine fu_xyt
+end subroutine Q_2D_t
