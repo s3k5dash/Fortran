@@ -76,7 +76,7 @@ program alphaFinder
 
 ! -------------------------------------------------------------------------------------
     !! gnuplot -> plot from file 
-    ! ( Remember to change the Value of { Bit, Bib and L } in "plot_alpha_m.gnu" file )
+    ! ( Remember to change the Value of { Bi_t, Bib and L } in "plot_alpha_m.gnu" file )
 
     ! call execute_command_line("gnuplot plot_alpha_m.gnu")
 
@@ -89,21 +89,27 @@ subroutine newtonRaphson(x, alpha, iteration)
 
     implicit none
 
-    real(8) :: x, fx, fx_prime, error, alpha, bit, bib, length
+    real(8) :: x, fx, fx_prime, error, alpha, length, bi_t, bib
     real(8) :: tol = 0.00001
     integer :: iteration
 
     iteration = 0
     
-    ! Value of Bit Bib and L
-    bit = 10.0
-    bib = 1.0 
-    length = 1.0
+! -------------------------------------------------------------------------------------------
+    !! 'constants.dat' file Input operations
 
-    10  fx = ((x * (bib + bit) )/ (x**2 - (bib*bit))) - (1 * tan(x*length))
+    open(unit=1, file="constants.dat", status='old', action='read')
     
-        fx_prime = (((bib + bit) * (x**2 - (bib*bit))) - ((bib + bit) * (2.0 * x**2))) &
-                    / ((x**2 - (bib*bit))**2) - 1/cos(x*length)**2
+        read(1, *) length, bi_t, bib
+
+    close(1)
+! -------------------------------------------------------------------------------------------
+
+
+    10  fx = ((x * (bib + bi_t) )/ (x**2 - (bib*bi_t))) - (1 * tan(x*length))
+    
+        fx_prime = (((bib + bi_t) * (x**2 - (bib*bi_t))) - ((bib + bi_t) * (2.0 * x**2))) &
+                    / ((x**2 - (bib*bi_t))**2) - 1/cos(x*length)**2
 
 
         error=fx/fx_prime

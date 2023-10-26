@@ -75,7 +75,7 @@ program betaFinder
     print*, "end"
 
 ! -------------------------------------------------------------------------------------
-    !! gnuplot -> plot from file 
+    ! gnuplot -> plot from file 
     ! ( Remember to change the Value of { BiT } in "plot_beta_n.gnu" file )
 
 
@@ -90,14 +90,23 @@ subroutine newtonRaphson(x, beta, iteration)
 
     implicit none
 
-    real(8) :: x, fx, fx_prime, error, beta, biT
+    real(8) :: x, fx, fx_prime, error, beta, biT, tmp
     real(8) :: tol = 0.00001
     integer :: iteration
 
     iteration = 0
     
-    ! Value of BiT
-    biT = 1.0
+    
+! -------------------------------------------------------------------------------------------
+    !! 'constants.dat' file Input operations
+
+    open(unit=1, file="constants.dat", status='old', action='read')
+    
+        read(1, *) tmp, tmp, tmp, biT
+
+    close(1)
+! -------------------------------------------------------------------------------------------
+
     
 
     10  fx = x * tan(x) - BiT
