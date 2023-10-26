@@ -1,11 +1,11 @@
-program FunctionEvaluation
+program qEvaluation
 
     implicit none
 
     integer, parameter :: max = 200
-    integer :: i, ux_length, qt_length, k
-    real(8) :: u_x(max), x_i(max), q_t(max), t_i(max)
-    real(8) :: u, q, length, bi_t, bib, biT, x, y, t
+    integer :: i, qt_length, k
+    real(8) :: q_t(max), t_i(max)
+    real(8) :: q, length, bi_t, bib, biT, x, y, t
 
 
 ! -------------------------------------------------------------------------------------------
@@ -16,8 +16,11 @@ program FunctionEvaluation
     bib = 1.0         ! Replace with desired value
     biT = 1.0         ! Replace with desired value
     x = 0.5           ! Replace with desired value
-    y = 1           ! Replace with desired value
+    y = 1             ! Replace with desired value
     t = 1.0           ! Replace with desired value
+
+    ! Manually change the value of "length, bi_t, bib, biT" in 'plot_alpha_m.gnu' & 'plot_beta_n.gnu'
+
 
 ! -------------------------------------------------------------------------------------------
     !! Assign values of the constants to the 'constants.dat' file
@@ -41,50 +44,6 @@ program FunctionEvaluation
     ! call execute_command_line("gnuplot plot_beta_n.gnu")
 
 ! -------------------------------------------------------------------------------------------
-!     !! U Finder
-
-!     i = 1
-!     x = 0
-
-!     13  if ( x .gt. 1) then
-!             goto 14
-!         end if
-        
-!         call fu_xyt(length, bi_t, bib, biT, x, y, t, u)
-
-!         u_x(i) = u
-!         x_i(i) = x
-
-!         x = x + 0.1
-!         i = i + 1  
-
-!         goto 13
-!     14  ux_length = i-1
-    
-! ----------------------------------------------
-    !! Debugging print statements 
-
-    ! print*, ux_length
-
-    ! do i = 1, ux_length
-    !     print*, "u_x(", i, ") = ", u_x(i)
-    ! end do
-
-! -------------------------------------------------------------------------------------------
-    !! 'fU_x.dat' file Output operations
-
-!     open(unit=1, file='fU_x.dat', status='replace')
-
-!     do k = 1, ux_length
-!         write(1,*) u_x(k), x_i(k)
-!     end do
-
-!     close(unit=1)
-
-!     print*, "U Finder executed successfully"
-
-! -------------------------------------------------------------------------------------------
-
     !! Q Finder
 
     i = 1
@@ -108,14 +67,14 @@ program FunctionEvaluation
 ! ----------------------------------------------
     !! Debugging print statements 
 
-    print*, qt_length
+    ! print*, qt_length
 
-    do i = 1, qt_length
-        print*, "q_t(", i, ") = ", q_t(i)
-    end do
-    do i = 1, qt_length
-        print*, "t_i(", i, ") = ", t_i(i)
-    end do
+    ! do i = 1, qt_length
+    !     print*, "q_t(", i, ") = ", q_t(i)
+    ! end do
+    ! do i = 1, qt_length
+    !     print*, "t_i(", i, ") = ", t_i(i)
+    ! end do
 
 ! -------------------------------------------------------------------------------------------
     !! 'fQ_t.dat' file Output operations
@@ -130,9 +89,14 @@ program FunctionEvaluation
 
     print*, "U Finder executed successfully"
 
+! -------------------------------------------------------------------------------------
+    !! gnuplot -> plot from file 
+
+    call execute_command_line("gnuplot plot_Q_t.gnu")
+
 ! -------------------------------------------------------------------------------------------
 
-end program FunctionEvaluation
+end program qEvaluation
 
 ! =========================================================================================================
 
@@ -184,7 +148,7 @@ subroutine Q_2D_t(length, bi_t, bib, biT, x, y, t, q)
     ! end do
    
 ! -------------------------------------------------------------------------------------------
-    !! Calculation of cm(m), bm(m), am(m), bm(m)(m), bmn, q
+    !! Calculation of cm(m), bm(m), bmn, q
 
     do m = 1, max 
 

@@ -1,4 +1,4 @@
-program FunctionEvaluation
+program uEvaluation
 
     implicit none
 
@@ -88,9 +88,14 @@ program FunctionEvaluation
 
     print*, "U Finder executed successfully"
 
+! -------------------------------------------------------------------------------------
+    !! gnuplot -> plot from file 
+
+    call execute_command_line("gnuplot plot_U_x.gnu")
+
 ! -------------------------------------------------------------------------------------------
 
-end program FunctionEvaluation
+end program uEvaluation
 
 ! =========================================================================================================
 

@@ -1,5 +1,5 @@
-set xlabel "x-axis"
-set ylabel "y-axis"
+set xlabel "t"
+set ylabel "Q"
 set title "Q_t"
 
 set terminal wxt size 1066,600
