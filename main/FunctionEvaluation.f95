@@ -2,10 +2,10 @@ program FunctionEvaluation
 
     implicit none
 
-    integer, parameter :: max = 50
-    integer :: i, w, m, n 
-    real(8) :: alpha(max), beta(max), cm(max), bm(max), am(max), B_m(max)
-    real(8) :: length, bib, biT, bmn, u, v, x, y, t, bi_t
+    integer, parameter :: max = 200
+    integer :: i, ux_length, k
+    real(8) :: u_x(max), x_i(max)
+    real(8) :: u, length, bi_t, bib, biT, x, y, t
 
 
 ! -------------------------------------------------------------------------------------------
@@ -31,15 +31,72 @@ program FunctionEvaluation
 ! -------------------------------------------------------------------------------------
     !! gnuplot -> plot from file 
 
-    call execute_command_line("gfortran alpha_m.f95 -o  alpha_m")
-    call execute_command_line(".\alpha_m ")
+    call execute_command_line("gfortran alphaFinder.f95 -o  alphaFinder")
+    call execute_command_line(".\alphaFinder ")
 
-    call execute_command_line("gfortran beta_n.f95 -o beta_n")
-    call execute_command_line(".\beta_n ")
+    call execute_command_line("gfortran betaFinder.f95 -o betaFinder")
+    call execute_command_line(".\betaFinder ")
 
-    call execute_command_line("gnuplot plot_alpha_m.gnu")
-    call execute_command_line("gnuplot plot_beta_n.gnu")
+    ! call execute_command_line("gnuplot plot_alpha_m.gnu")
+    ! call execute_command_line("gnuplot plot_beta_n.gnu")
 
+! -------------------------------------------------------------------------------------------
+    !! U Finder
+
+    i = 1
+    x = 0
+
+    13  if ( x .gt. 1) then
+            goto 14
+        end if
+        
+        call fu_xyt(length, bi_t, bib, biT, x, y, t, u)
+
+        u_x(i) = u
+        x_i(i) = x
+
+        x = x + 0.1
+        i = i + 1  
+
+        goto 13
+    14  ux_length = i-1
+    
+! ----------------------------------------------
+    !! Debugging print statements 
+
+    ! print*, ux_length
+
+    ! do i = 1, ux_length
+    !     print*, "u_x(", i, ") = ", u_x(i)
+    ! end do
+
+! -------------------------------------------------------------------------------------------
+    !! 'beta_n.dat' file Output operations
+
+    open(unit=1, file='fu.dat', status='replace')
+
+    do k = 1, ux_length
+        write(1,*) u_x(k), x_i(k)
+    end do
+
+    close(unit=1)
+
+    print*, "U Finder executed successfully"
+
+! -------------------------------------------------------------------------------------------
+
+end program FunctionEvaluation
+
+! =========================================================================================================
+
+subroutine fu_xyt(length, bi_t, bib, biT, x, y, t, u)
+
+    implicit none
+    
+    integer, parameter :: max = 50
+    integer :: i, w, m, n 
+    real(8) :: alpha(max), beta(max), cm(max), bm(max), am(max), B_m(max)
+    real(8) :: bmn, u, temp_v, length, bi_t, bib, biT, x, y, t
 
 ! -------------------------------------------------------------------------------------------
     !! 'alpha_m.dat' file read operations
@@ -78,8 +135,7 @@ program FunctionEvaluation
     !     write(*,*) "alpha(", i, ") = ", alpha(i)
     !     write(*,*) "beta(", i, ") = ", beta(i)
     ! end do
-
-
+   
 ! -------------------------------------------------------------------------------------------
     !! Calculation of cm(m), bm(m), am(m), B_m(m), bmn, u
 
@@ -101,19 +157,18 @@ program FunctionEvaluation
             bmn = (-2*(bm(m))*(((beta(n))*(sin(beta(n))))-(biT*(cos(beta(n))))+biT)) / ((beta(n))*biT)* &
                 (((cos(beta(n)))*(sin(beta(n))))+(beta(n)))
 
-            v = v + (((beta(n)**2)*exp(-((beta(n)**2)+(alpha(m)**2))*t)+(alpha(m)**2))/((beta(n)**2)+(alpha(m)**2))) * &
+            temp_v = temp_v + (((beta(n)**2)*exp(-((beta(n)**2)+(alpha(m)**2))*t)+(alpha(m)**2))/((beta(n)**2)+(alpha(m)**2))) * &
                 (cos(beta(n)*x)*bmn) * &
                 (((cos(alpha(m)*y)))+((bib/(alpha(m)))*(sin(alpha(m)*y))))
             
         end do
 
-    u = u + (((1 - x)*am(m)) + (x*B_m(m))) + v
+        u = u + (((1 - x)*am(m)) + (x*B_m(m))) + temp_v
 
-    v = 0
+        temp_v = 0
 
-  end do
+    end do
 
-  
 ! ----------------------------------------------------------
     !! Debugging print statements 
     
@@ -125,8 +180,8 @@ program FunctionEvaluation
 
     ! end do
     
-    write(*,*) "u = ", u
-    
-! -------------------------------------------------------------------------------------------
+    ! write(*,*) "u = ", u
 
-end program FunctionEvaluation
+ ! -------------------------------------------------------------------------------------------
+
+end subroutine fu_xyt

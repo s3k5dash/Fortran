@@ -62,7 +62,7 @@ program betaFinder
     ! end do
     
 ! -------------------------------------------------------------------------------------
-    !! 'data.dat' file Output operations
+    !! 'beta_n.dat' file Output operations
 
     open(unit=1, file='beta_n.dat', status='replace')
 
@@ -72,7 +72,7 @@ program betaFinder
 
     close(unit=1)
 
-    print*, "end"
+    print*, "Beta Finder executed successfully"
 
 ! -------------------------------------------------------------------------------------
     ! gnuplot -> plot from file 
@@ -85,6 +85,7 @@ program betaFinder
 
 end program betaFinder
 
+! =========================================================================================================
 
 subroutine newtonRaphson(x, beta, iteration)
 

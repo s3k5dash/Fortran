@@ -4,7 +4,7 @@ program alphaFinder
 
     real(8) :: x, alpha, dx
     real(8) :: alpha_m(50)
-    integer :: iteration,i
+    integer :: iteration, i
 
 
     integer :: k
@@ -62,7 +62,7 @@ program alphaFinder
     ! end do
     
 ! -------------------------------------------------------------------------------------
-    !! 'data.dat' file Output operations
+    !! 'alpha_m.dat' file Output operations
 
     open(unit=1, file='alpha_m.dat', status='replace')
 
@@ -72,7 +72,7 @@ program alphaFinder
 
     close(unit=1)
 
-    print*, "end"
+    print*, "Alpha Finder executed successfully"
 
 ! -------------------------------------------------------------------------------------
     !! gnuplot -> plot from file 
@@ -84,6 +84,7 @@ program alphaFinder
 
 end program alphaFinder
 
+! =========================================================================================================
 
 subroutine newtonRaphson(x, alpha, iteration)
 
