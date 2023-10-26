@@ -71,9 +71,9 @@ program FunctionEvaluation
     ! end do
 
 ! -------------------------------------------------------------------------------------------
-    !! 'beta_n.dat' file Output operations
+    !! 'fU_x.dat' file Output operations
 
-    open(unit=1, file='fu.dat', status='replace')
+    open(unit=1, file='fU_x.dat', status='replace')
 
     do k = 1, ux_length
         write(1,*) u_x(k), x_i(k)
