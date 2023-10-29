@@ -17,7 +17,7 @@ program qEvaluation
     biT = 1.0         ! Replace with desired value
     x = 0.1           ! Replace with desired value
     y = 1.0           ! Replace with desired value
-    t = 1.0           ! Replace with desired value
+    t = 2.0           ! Replace with desired value
 
     ! Manually change the value of "length, bi_t, bib, biT" in 'plot_alpha_m.gnu' & 'plot_beta_n.gnu'
 

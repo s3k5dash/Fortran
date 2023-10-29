@@ -9,6 +9,6 @@ set terminal wxt size 1066,600
 
 set pointsize 1
 
-plot 'fQ_t.dat' using 1:2 with linespoint title "Q" lt rgb "red" pt 1 lw 2 
+plot 'fQ_t.dat' using 1:2 with lines title "Q" lt rgb "red" lw 2 
 
 pause -1  "Press any key to exit..."
