@@ -3,8 +3,8 @@ program uEvaluation
     implicit none
 
     integer, parameter :: max = 200
-    integer :: i, ux_length, qt_length, k
-    real(8) :: u_x(max), x_i(max), q_t(max), t_i(max)
+    integer :: i, w, ux_length, k
+    real(8) :: u_x(max), x_i(max), q_t(max), t_i(max), alpha(50), beta(50)
     real(8) :: u, q, length, bi_t, bib, biT, x, y, t
 
 
@@ -43,6 +43,44 @@ program uEvaluation
     ! call execute_command_line("gnuplot plot_beta_n.gnu")
 
 ! -------------------------------------------------------------------------------------------
+    !! 'alpha_m.(m).dat' file read operations
+
+    open(unit=10, file="alpha_m.dat", status='old', action='read')
+    i = 0
+    do
+        read(10, *, iostat=w) alpha(i + 1)
+        if (w /= 0) then
+            exit
+        end if
+        i = i + 1
+    end do
+
+    close(10)
+
+! -------------------------------------------------------------------------------------------
+    !! 'beta_n.dat' file read operations
+
+    open(unit=11, file="beta_n.dat", status='old', action='read')
+    i = 0
+    do
+        read(11, *, iostat=w) beta(i + 1)
+        if (w /= 0) then
+            exit
+        end if
+        i = i + 1
+    end do
+
+    close(11)
+
+! ----------------------------------------------
+    !! Debugging print statements 
+
+    ! do i = 1, max
+    !     write(*,*) "alpha(", i, ") = ", alpha(i)
+    !     write(*,*) "beta(", i, ") = ", beta(i)
+    ! end do
+   
+! -------------------------------------------------------------------------------------------
     !! U Finder
 
     i = 1
@@ -52,7 +90,7 @@ program uEvaluation
             goto 14
         end if
         
-        call fu_xyt(length, bi_t, bib, biT, x, y, t, u)
+        call fu_xyt(alpha, beta, length, bi_t, bib, biT, x, y, t, u)
 
         u_x(i) = u
         x_i(i) = x
@@ -99,101 +137,48 @@ end program uEvaluation
 
 ! =========================================================================================================
 
-subroutine fu_xyt(length, bi_t, bib, biT, x, y, t, u)
+subroutine fu_xyt(alpha, beta, length, bi_t, bib, biT, x, y, t, u)
 
     implicit none
     
     integer, parameter :: max = 50
     integer :: i, w, m, n 
-    real(8) :: alpha(max), beta(max), cm(max), bm(max), am(max), B_m(max)
-    real(8) :: bmn, u, temp_v, length, bi_t, bib, biT, x, y, t
+    real(8) :: alpha(max), beta(max), cm, bm, am, B_m
+    real(8) :: bmn, u, temp_u, length, bi_t, bib, biT, x, y, t
 
 ! -------------------------------------------------------------------------------------------
-    !! 'alpha_m.dat' file read operations
-
-    open(unit=10, file="alpha_m.dat", status='old', action='read')
-    i = 0
-    do
-        read(10, *, iostat=w) alpha(i + 1)
-        if (w /= 0) then
-            exit
-        end if
-        i = i + 1
-    end do
-
-    close(10)
-
-! -------------------------------------------------------------------------------------------
-    !! 'beta_n.dat' file read operations
-
-    open(unit=11, file="beta_n.dat", status='old', action='read')
-    i = 0
-    do
-        read(11, *, iostat=w) beta(i + 1)
-        if (w /= 0) then
-            exit
-        end if
-        i = i + 1
-    end do
-
-    close(11)
-
-! ----------------------------------------------
-    !! Debugging print statements 
-
-    ! do i = 1, max
-    !     write(*,*) "alpha(", i, ") = ", alpha(i)
-    !     write(*,*) "beta(", i, ") = ", beta(i)
-    ! end do
-   
-! -------------------------------------------------------------------------------------------
-    !! Calculation of cm(m), bm(m), am(m), B_m(m), bmn, u
+    !! Calculation of cm, bm, am, B_m, bmn, u
 
     do m = 1, max 
 
-        cm(m) = (length * (alpha(m)**2 + (alpha(m) * (bib**2))) + &
+        cm = (length * (alpha(m)**2 + (alpha(m) * (bib**2))) + &
             ((sin(2.0 * alpha(m) * length) * ((alpha(m)**2 - bib**2)) / 2.0)) - &
             (2.0 * alpha(m) * bib * (cos(alpha(m) * length)**2 - 1.0)))
 
-        bm(m) = (2.0 * (((alpha(m)**2)*(sin(alpha(m)*length))) - &
-            ((bib*alpha(m))*(cos(alpha(m)*length) - 1.0)))/ cm(m))
+        bm = (2.0 * (((alpha(m)**2)*(sin(alpha(m)*length))) - &
+            ((bib*alpha(m))*(cos(alpha(m)*length) - 1.0)))/ cm)
 
-        am(m) = bm(m) + (bm(m) / biT)
+        am = bm + (bm / biT)
 
-        B_m(m) = bm(m) / biT
+        B_m = bm / biT
 
         do n = 1, max
 
-            bmn = ((-2*(bm(m))*(((beta(n))*(sin(beta(n))))-(biT*(cos(beta(n))))+biT)) / (((beta(n))*biT)* &
+            bmn = ((-2*(bm)*(((beta(n))*(sin(beta(n))))-(biT*(cos(beta(n))))+biT)) / (((beta(n))*biT)* &
                 (((cos(beta(n)))*(sin(beta(n))))+(beta(n)))))
 
-            temp_v = temp_v + (((((beta(n)**2)*exp(-1*((beta(n)**2)+(alpha(m)**2))*t))+(alpha(m)**2))/ &
+            temp_u = temp_u + (((((beta(n)**2)*exp(-1*((beta(n)**2)+(alpha(m)**2))*t))+(alpha(m)**2))/ &
                 ((beta(n)**2)+(alpha(m)**2))) * (cos(beta(n)*x)*bmn))
                 
             
         end do
 
-        u = u + ((((1 - x)*am(m)) + (x*B_m(m)) + (temp_v))* &
+        u = u + ((((1 - x)*am) + (x*B_m) + (temp_u))* &
                 ((cos(alpha(m)*y))+((bib/(alpha(m)))*(sin(alpha(m)*y)))))
 
 
-        temp_v = 0
+        temp_u = 0
 
     end do
-
-! ----------------------------------------------------------
-    !! Debugging print statements 
-    
-    ! do i = 1, max
-    !     write(*,*) "cm(", i, ") = ", cm(i)
-    !     write(*,*) "bm(", i, ") = ", bm(i)
-    !     write(*,*) "am(", i, ") = ", am(i)
-    !     write(*,*) "B_m(", i, ") = ", B_m(i)
-
-    ! end do
-    
-    ! write(*,*) "u = ", u
-
- ! -------------------------------------------------------------------------------------------
 
 end subroutine fu_xyt
