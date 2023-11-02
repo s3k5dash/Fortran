@@ -13,7 +13,7 @@ program uEvaluation
 
     length = 0.5      ! Replace with desired value
     bi_t = 10.0       ! Replace with desired value
-    bib = 1.0         ! Replace with desired value
+    bib = 0.0         ! Replace with desired value
     biT = 1.0         ! Replace with desired value
     x = 1.0           ! Replace with desired value
     y = 0.5           ! Replace with desired value

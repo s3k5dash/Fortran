@@ -2,19 +2,15 @@ program alphaFinder
 
     implicit none
 
-    real :: xin, xout, beta, dx
-    integer :: max_m, max_n, iteration, i
-    real :: xout(max_m), beta_n(max_n)
-
-
-    integer :: k , equation 
-    integer :: num_elements = max_m
-
+    real :: xin, xout, beta, dx, equation 
+    integer :: iteration, i, k
+    integer, parameter :: max = 50
+    real :: alpha_m(max), beta_n(max)
 
     xin = 1
     equation = 1
 
-    do i = 1, max_m, 1
+    do i = 1, max, 1
 
     dx = 1
 
@@ -24,7 +20,7 @@ program alphaFinder
 
             if ( i .eq. 1 ) then 
 
-                xout(i) =  xout
+                alpha_m(i) =  xout
                 cycle
 
             endif
@@ -36,7 +32,7 @@ program alphaFinder
 
             endif
 
-        xout(i) = xout 
+        alpha_m(i) = xout 
 
         !! Debugging print statements 
         ! print*,"The root of the equation is", xout
@@ -68,7 +64,7 @@ program alphaFinder
     open(unit=1, file='xout.dat', status='old', action='write', position='append')
     ! open(unit=1, file='xout.dat', status='replace')
 
-    do k = 1, num_elements
+    do k = 1, max
         write(1,*) xout(k), 0
     end do
 
@@ -92,7 +88,7 @@ subroutine newtonRaphson(xin, xout, equation)
     implicit none
 
     real :: xin, xout, fx, fx_prime, error, bit, bib, biT, length
-    integer :: equation
+    real :: equation
     real :: tol = 0.00001
     
     ! Value of Bit Bib and L

@@ -4,7 +4,7 @@ program alphaFinder
 
     real(8) :: x, alpha, dx
     real(8) :: alpha_m(50)
-    integer :: iteration, i
+    integer :: i
 
 
     integer :: k
@@ -19,7 +19,7 @@ program alphaFinder
 
         11  x = x + dx
 
-            call newtonRaphson(x, alpha, iteration)
+            call newtonRaphson(x, alpha)
 
             if ( i .eq. 1 ) then 
 
@@ -40,7 +40,6 @@ program alphaFinder
         !! Debugging print statements 
         ! print*,"The root of the equation is", alpha
         ! print*, "the value of x is", x
-        ! Print*,"Iteration is",iteration
         
         x = alpha
 
@@ -54,10 +53,9 @@ program alphaFinder
     !     print*,"Please insert the initial guess of the root of equation."
     !     read*,x
     
-    !     call newtonRaphson(x, alpha, iteration)
+    !     call newtonRaphson(x, alpha)
 
     !     print*,"The root of the equation is",x
-    !     Print*,"Iteration is",iteration
 
     ! end do
     
@@ -86,15 +84,12 @@ end program alphaFinder
 
 ! =========================================================================================================
 
-subroutine newtonRaphson(x, alpha, iteration)
+subroutine newtonRaphson(xin, xout)
 
     implicit none
 
-    real(8) :: x, fx, fx_prime, error, alpha, length, bi_t, bib
-    real(8) :: tol = 0.00001
-    integer :: iteration
-
-    iteration = 0
+    real(8) :: xin, fx, fx_prime, error, xout, length, bi_t, bib
+    real(8) :: tol = 0.000000001d0
     
 ! -------------------------------------------------------------------------------------------
     !! 'constants.dat' file Input operations
@@ -107,30 +102,27 @@ subroutine newtonRaphson(x, alpha, iteration)
 ! -------------------------------------------------------------------------------------------
 
 
-    10  fx = ((x * tan(x)) - bi_t)
+    10  fx = ((xin * tan(xin)) - bi_t)
     
-        fx_prime = (tan(x) + (x * (1 / cos(x)**2)))
+        fx_prime = (tan(xin) + (xin * (1 / cos(xin)**2)))
 
 
         error=fx/fx_prime
-        x=x-error
-        iteration=iteration+1
+        xin=xin-error
 
         if (abs(error) .gt. tol) then
 
             !! Debugging print statements 
-            ! print*,"The root of the equation is",x
+            ! print*,"The root of the equation is",xin
             ! print*,"Tolerance is",tol
-            ! Print*,"Iteration is",iteration
 
         goto 10
 
     endif
 
-    alpha = x
+    xout = xin
     
     
     ! print*,"Tolerance is",tol
-    ! Print*,"Iteration is",iteration
 
 end

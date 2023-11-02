@@ -13,7 +13,7 @@ program qEvaluation
 
     length = 1        ! Replace with desired value
     bi_t = 1.0        ! Replace with desired value
-    bib = 1.0         ! Replace with desired value
+    bib = 0.0         ! Replace with desired value
     biT = 1.0         ! Replace with desired value
     x = 0.1           ! Replace with desired value
     y = 1.0           ! Replace with desired value
