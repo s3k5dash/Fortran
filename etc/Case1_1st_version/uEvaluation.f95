@@ -4,7 +4,7 @@ program uEvaluation
 
     integer, parameter :: max = 200
     integer :: i, w, ux_length, k
-    real(8) :: u_x(max), x_i(max), q_t(max), t_i(max), alpha(50), beta(50)
+    real(8) :: u_x(max), x_i(max), alpha(50), beta(50)
     real(8) :: u, q, length, bi_t, bib, biT, x, y, t
 
 
@@ -135,7 +135,7 @@ program uEvaluation
 
 end program uEvaluation
 
-! =========================================================================================================
+! =======================zz==================================================================================
 
 subroutine fu_xyt(alpha, beta, length, bi_t, bib, biT, x, y, t, u)
 

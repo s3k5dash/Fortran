@@ -51,7 +51,7 @@ program alphaBetaFinder
     ! call execute_command_line("gnuplot plot_beta_n.gnu")
 
 ! -------------------------------------------------------------------------------------
-    print*, "Alpha Finder executed successfully"
+    print*, "Alpha Beta Finder executed successfully"
 
 end program alphaBetaFinder
 
