@@ -18,7 +18,7 @@ set yrange [-5:5]
 set pointsize 2
 
 plot \
-0 with lines title "0" lt rgb "black" pt 2, \
+0 with lines title "0" lt rgb "black", \
 f(x) with lines title "f(Alpha)" lt rgb "green" lw 2, \
 df(x) with lines title "f'(Alpha)" lt rgb "gold" lw 2, \
 fdf(x) with lines title "Error = f(Alpha)/f'(Alpha)" lt rgb "blue" lw 2, \

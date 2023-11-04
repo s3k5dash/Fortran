@@ -7,9 +7,11 @@ program Case1
     real(8), dimension(elements) :: alpha, beta
     real(8) :: bi_t, bib, biT, length, x, y, t, q, u
     
-    integer, parameter :: maxresolution = 1000
+    integer, parameter :: maxresolution = 200
     integer :: resolution
     real(8), dimension(maxresolution)  :: ux, xi, qt, ti
+    
+    real(8) :: dx, dt, ranget
 
 
 !! Assign values to the constants
@@ -18,7 +20,7 @@ program Case1
     bib = 1.0         ! Replace with desired value
     biT = 1.0         ! Replace with desired value
     length = 1        ! Replace with desired value
-    x = 0.1           ! Replace with desired value
+    x = 1.0           ! Replace with desired value
     y = 1.0           ! Replace with desired value
     t = 2.0           ! Replace with desired value
 
@@ -64,27 +66,31 @@ program Case1
     close(unit=2)
 
 ! -------------------------------------------------------------------------------------
+    print*, "Alpha Beta Finder executed successfully"
 
 !! U Finder
 
     i = 1
     x = 0
-
-    13  continue
-        if ( x .gt. 1) then
-            goto 14
-        end if
+    dx = 1.d0/(maxresolution-1)
         
+    13  continue
+
         call fuxyt(elements, alpha, beta, bi_t, bib, biT, length, x, y, t, u)
 
         ux(i) = u
         xi(i) = x
+        
+        i = i + 1
+        x = x + dx
 
-        x = x + 0.1
-        i = i + 1  
+        if ( x .ge. 1) then
+            goto 14
+        end if
 
         goto 13
-    14  resolution = i-1
+    14  continue
+    resolution = i-1
     
     !! Debugging print statements 
 
@@ -109,30 +115,34 @@ program Case1
 
     close(unit=4)
 
-    print*, "U Finder executed successfully"
-
 ! -------------------------------------------------------------------------------------
+    print*, "U Finder executed successfully"
 
 !! Q Finder
 
+    ranget = 1.d0      ! Replace with desired value
+
+    dt = ranget/(maxresolution-1)
     i = 1
     t = 0
 
     15 continue
-        if ( t .gt. 2.0d0) then
-            goto 16
-        end if
-        
+
         call Q2Dt(elements, alpha, beta, bi_t, bib, biT, length, x, y, t, q)
 
         ti(i) = t
         qt(i) = q
 
-        t = t + 0.01d0
+        t = t + dt
         i = i + 1  
 
+        if ( t .ge. ranget) then
+            goto 16
+        end if
+
         goto 15
-    16 resolution = i-1
+    16 continue
+    resolution = i-1
     
     !! Debugging print statements 
 
@@ -156,22 +166,20 @@ program Case1
 
     close(unit=3)
 
-    print*, "U Finder executed successfully"
-
 ! -------------------------------------------------------------------------------------
+    print*, "Q Finder executed successfully"
 
 !! gnuplot -> plot from file 
 
     ! ( Remember to change the Value of { Bi_t, Bib and L } in "plot_alpha.gnu" file )
 
-        call execute_command_line("gnuplot gnu/plot_alpha.gnu")
-        call execute_command_line("gnuplot gnu/plot_beta.gnu")
-        call execute_command_line("gnuplot gnu/plot_Ux.gnu")
-        call execute_command_line("gnuplot gnu/plot_Qt.gnu")
+        ! call execute_command_line("gnuplot gnu/plot_alpha.gnu")
+        ! call execute_command_line("gnuplot gnu/plot_beta.gnu")
+        ! call execute_command_line("gnuplot gnu/plot_Ux.gnu")
+        ! call execute_command_line("gnuplot gnu/plot_Qt.gnu")
 
 ! -------------------------------------------------------------------------------------
 
-    print*, "Alpha Beta Finder executed successfully"
 
 end program Case1
 
