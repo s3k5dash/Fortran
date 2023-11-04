@@ -164,10 +164,10 @@ program Case1
 
     ! ( Remember to change the Value of { Bi_t, Bib and L } in "plot_alpha.gnu" file )
 
-        call execute_command_line("gnuplot plot/plot_alpha.gnu")
-        call execute_command_line("gnuplot plot/plot_beta.gnu")
-        call execute_command_line("gnuplot plot/plot_Ux.gnu")
-        call execute_command_line("gnuplot plot/plot_Qt.gnu")
+        call execute_command_line("gnuplot gnu/plot_alpha.gnu")
+        call execute_command_line("gnuplot gnu/plot_beta.gnu")
+        call execute_command_line("gnuplot gnu/plot_Ux.gnu")
+        call execute_command_line("gnuplot gnu/plot_Qt.gnu")
 
 ! -------------------------------------------------------------------------------------
 
